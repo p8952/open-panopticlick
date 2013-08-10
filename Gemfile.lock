@@ -5,6 +5,7 @@ GEM
     rack-protection (1.5.0)
       rack
     rake (10.1.0)
+    redis (3.0.4)
     sinatra (1.4.3)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -17,5 +18,6 @@ PLATFORMS
 
 DEPENDENCIES
   rake
+  redis
   sinatra
   useragent
