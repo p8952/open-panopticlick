@@ -1,0 +1,4 @@
+*.sqlite
+.bundle/
+.ruby-gemset
+.ruby-version
