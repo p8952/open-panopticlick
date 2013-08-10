@@ -1,31 +1,53 @@
-<%
-user_agent = UserAgent.parse(request.user_agent)
-
-$id_vars[:os] = user_agent.os
-$id_vars[:platform] = user_agent.platform
-$id_vars[:browser] = user_agent.browser
-$id_vars[:version] = user_agent.version
-$id_vars[:build] = user_agent.build
-$id_vars[:localization] = user_agent.localization
-
-id_json =$id_vars.to_json
-id_md5 = Digest::MD5.hexdigest(id_json)
-
-$redis.incr(id_md5) unless cookies[:open_panopticlick]
-id_match = $redis.get(id_md5)
-id_total = $redis.keys.count
-
-cookies[:open_panopticlick] = 'locked'
-%>
-
-<table class="table table-bordered table-condensed">
-  <tr><td>Fingerprint</td><td class="text-center"><%=id_md5%></td></tr>
-  <tr><td>Uniqueness</td><td class="text-center"><%="#{id_match} / #{id_total}"%></td></tr>
-</table>
-
-<hr>
-
-<h3>About:</h3>
-<p>In 2010 the <a href="https://www.eff.org/">Electronic Frontier Foundation (EFF)</a> announced <a href="https://panopticlick.eff.org/">Panopticlick</a>, a web application designed to identify unique users by fingerprinting their web browsers.</p>
-<p>In 2013 after Panopticlick was reposted <sup><small>(Again...)</small></sup> on <a href="https://news.ycombinator.com/">Hacker News</a>, I became curious about how exactly some parts of it worked. On discovering that the EFF have never published any source code for Panopticlick, I decided to create a FOSS (GPLv3) reimplementation.</p>
-<small>Privacy Policy: Open Panopticlick stores no personal infomation from you except an md5sum of your web browser's metadata and a single cookie.<sup><a href="http://nocookielaw.com/">(Yummm... Cookies...)</a></sup></small>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Open Panopticlick</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-lg-8 col-offset-2">
+        <div class="navbar navbar-inverse">
+          <a class="navbar-brand" href="/">Open Panopticlick</a>
+          <a type="button" class="btn btn-default navbar-btn pull-right" href="https://github.com/p8952/open-panopticlick">Fork me!</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-offset-3">
+        <%
+        user_agent = UserAgent.parse(request.user_agent)
+        
+        $id_vars[:os] = user_agent.os
+        $id_vars[:platform] = user_agent.platform
+        $id_vars[:browser] = user_agent.browser
+        $id_vars[:version] = user_agent.version
+        $id_vars[:build] = user_agent.build
+        $id_vars[:localization] = user_agent.localization
+        
+        id_json =$id_vars.to_json
+        id_md5 = Digest::MD5.hexdigest(id_json)
+        
+        $redis.incr(id_md5) unless cookies[:open_panopticlick]
+        id_match = $redis.get(id_md5)
+        id_total = $redis.keys.count
+        
+        cookies[:open_panopticlick] = 'locked'
+        %>
+        
+        <table class="table table-bordered table-condensed">
+          <tr><td>Fingerprint</td><td class="text-center"><%=id_md5%></td></tr>
+          <tr><td>Uniqueness</td><td class="text-center"><%="#{id_match} / #{id_total}"%></td></tr>
+        </table>
+        
+        <hr>
+        
+        <h3>About:</h3>
+        <p>In 2010 the <a href="https://www.eff.org/">Electronic Frontier Foundation (EFF)</a> announced <a href="https://panopticlick.eff.org/">Panopticlick</a>, a web application designed to identify unique users by fingerprinting their web browsers.</p>
+        <p>In 2013 after Panopticlick was reposted <sup><small>(Again...)</small></sup> on <a href="https://news.ycombinator.com/">Hacker News</a>, I became curious about how exactly some parts of it worked. On discovering that the EFF have never published any source code for Panopticlick, I decided to create a FOSS (GPLv3) reimplementation.</p>
+        <small>Privacy Policy: Open Panopticlick stores no personal infomation from you except an md5sum of your web browser's metadata and a single cookie.<sup>(Yummm... Cookies...)</sup></small> 
+      </div>
+    </div>
+  </body>
+</html>
