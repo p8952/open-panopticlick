@@ -14,14 +14,17 @@ $id_vars.each do |key, val|
   val = 'nil' if val.nil?
   val = 'false' if val == false
   val = 'true' if val == true
-  id_str << val
+  id_str << "#{key}:#{val}, "
 end
 
 id_md5 = Digest::MD5.hexdigest(id_str)
+
 $redis.incr(id_md5)
+id_match = $redis.get(id_md5)
+id_total = $redis.keys.count
 %>
 <table class="table table-bordered table-condensed">
   <tr><td>ID String</td><td class="text-center"><%=id_str%></td></tr>
   <tr><td>ID Fingerprint</td><td class="text-center"><%=id_md5%></td></tr>
-  <tr><td>ID Uniqueness</td><td class="text-center"><%=$redis.get(id_md5)%></td></tr>
+  <tr><td>ID Uniqueness</td><td class="text-center"><%="#{id_match} / #{id_total}"%></td></tr>
 </table>
