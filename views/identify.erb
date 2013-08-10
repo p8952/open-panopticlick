@@ -1,0 +1,19 @@
+<%
+user_agent = UserAgent.parse(request.user_agent)
+$id_vars[:os] = user_agent.os
+$id_vars[:platform] = user_agent.platform
+$id_vars[:browser] = user_agent.browser
+$id_vars[:version] = user_agent.version
+$id_vars[:build] = user_agent.build
+$id_vars[:localization] = user_agent.localization
+id_str = ''
+$id_vars.each do |key, val|
+  val = 'nil' if val.nil?
+  val = 'false' if val == false
+  val = 'true' if val == true
+  id_str << val
+end
+%>
+<div class="well text-center">
+  <%=Digest::MD5.hexdigest(id_str)%>
+</div>
