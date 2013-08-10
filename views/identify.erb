@@ -11,9 +11,11 @@ $id_vars[:localization] = user_agent.localization
 id_json =$id_vars.to_json
 id_md5 = Digest::MD5.hexdigest(id_json)
 
-$redis.incr(id_md5)
+$redis.incr(id_md5) unless cookies[:open_panopticlick]
 id_match = $redis.get(id_md5)
 id_total = $redis.keys.count
+
+cookies[:open_panopticlick] = 'locked'
 %>
 
 <table class="table table-bordered table-condensed">

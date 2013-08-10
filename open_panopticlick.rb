@@ -2,6 +2,7 @@ require 'digest/md5'
 require 'json'
 require 'redis'
 require 'sinatra'
+require 'sinatra/cookies'
 require 'useragent'
 
 if ENV["REDISCLOUD_URL"]
