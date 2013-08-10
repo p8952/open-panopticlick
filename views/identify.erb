@@ -8,23 +8,17 @@ $id_vars[:version] = user_agent.version
 $id_vars[:build] = user_agent.build
 $id_vars[:localization] = user_agent.localization
 
-id_str = String.new
-
-$id_vars.each do |key, val|
-  val = 'nil' if val.nil?
-  val = 'false' if val == false
-  val = 'true' if val == true
-  id_str << "#{key}:#{val}, "
-end
-
-id_md5 = Digest::MD5.hexdigest(id_str)
+id_json =$id_vars.to_json
+id_md5 = Digest::MD5.hexdigest(id_json)
 
 $redis.incr(id_md5)
 id_match = $redis.get(id_md5)
 id_total = $redis.keys.count
 %>
+
 <table class="table table-bordered table-condensed">
-  <tr><td>ID String</td><td class="text-center"><%=id_str%></td></tr>
-  <tr><td>ID Fingerprint</td><td class="text-center"><%=id_md5%></td></tr>
-  <tr><td>ID Uniqueness</td><td class="text-center"><%="#{id_match} / #{id_total}"%></td></tr>
+  <tr><td>Fingerprint</td><td class="text-center"><%=id_md5%></td></tr>
+  <tr><td>Uniqueness</td><td class="text-center"><%="#{id_match} / #{id_total}"%></td></tr>
 </table>
+
+<small><%=id_json%></small>

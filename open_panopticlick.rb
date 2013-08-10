@@ -1,4 +1,5 @@
 require 'digest/md5'
+require 'json'
 require 'redis'
 require 'sinatra'
 require 'useragent'
