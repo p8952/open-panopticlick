@@ -23,10 +23,6 @@ $id_vars[:localization] = 0
 class OpenPanopticlick < Sinatra::Application
   
   get '/' do
-    redirect to('/identify/')
-  end
-
-  get '/identify/?' do
     erb :identify
   end
 
